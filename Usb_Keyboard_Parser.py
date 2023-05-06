@@ -33,7 +33,7 @@ def keystroke_decoder(filepath,data):
                 else: break
 
     if modifier != 0:
-        print(f'[-] Found 0x01 Modifier in {modifier} packets [-]')
+        print(f'[-] Found Modifier in {modifier} packets [-]')
     return message
 
 if len(sys.argv) != 2 or os.path.exists(filepath) != 1:
@@ -48,13 +48,14 @@ if len(sys.argv) != 2 or os.path.exists(filepath) != 1:
 function_call = keystroke_decoder(filepath,data)
 hid_data =''
 
-print("\n[+]Using filter \"usb.capdata\" Retrived HID Data is : \n")
 for _ in range(len(function_call)): hid_data += function_call[_]
 
-print(hid_data)
+if(hid_data == ''):
+    function_call = keystroke_decoder(filepath, "usbhid.data")
+    print("\n[+] Using filter \"usbhid.data\" Retrived HID Data is : \n")
+    for _ in range(len(function_call)): print(function_call[_],end='')
+    print("\n")
+else:
+    print("\n[+] Using filter \"usb.capdata\" Retrived HID Data is : \n")
+    print(hid_data)
 
-data = "usbhid.data"
-function_call = keystroke_decoder(filepath,data)
-print("\n[+]Using filter \"usbhid.data\" Retrived HID Data is : \n")
-for _ in range(len(function_call)): print(function_call[_],end='')
-print("\n")
